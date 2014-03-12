@@ -11,7 +11,7 @@
 
 NSString* nmToLibToFile(NSString* path)
 {
-    NSString* cmd = [NSString stringWithFormat:@"nm -j -U \"%@\" 2>&1", path];
+    NSString* cmd = [NSString stringWithFormat:@"nm -j \"%@\" 2>&1", path];
     
     FILE* output = popen([cmd UTF8String] , "r+");
     
@@ -60,8 +60,11 @@ void parse(NSString* symlist, NSString* path)
             NSString* oldPath = [methodDic objectForKey:newLine];
             if (oldPath)
             {
-                NSString* outStr = [NSString stringWithFormat:@"%@\tboth in %@ and %@\n", newLine , oldPath , path];
-                puts([outStr UTF8String]);
+                if (![oldPath isEqualToString:path])
+                {
+                    NSString* outStr = [NSString stringWithFormat:@"%@\tboth in %@ and %@\n", newLine , oldPath , path];
+                    puts([outStr UTF8String]);
+                }
             }
             else
             {
